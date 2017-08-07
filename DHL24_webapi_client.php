@@ -1,8 +1,10 @@
 <?php
+namespace DHL;
+use SoapClient;
 class DHL24_webapi_client extends SoapClient {
 	const WSDL = 'https://sandbox.dhl24.com.pl/webapi2';
 
 	public function __construct() {
-		parent::__construct( self::WSDL );
+		parent::__construct( self::WSDL, array('trace'=> 1));
 	}
 }
