@@ -1,10 +1,13 @@
 <?php
+/**
+ * This file is used to redirect links from index.html to appriopriate methods with parameters
+ */
 	use DHL\Dhl24;
-	include 'Dhl24.php';
+	include 'DHL24.php';
 	include 'Config.php';
 
 	if(isset($_GET['action'])){
-		$dhl = new Dhl24();
+		$dhl = new DHL24();
 		switch ($_GET['action']) {
 			case 'getVersion': $dhl->getVersion(); break;
 			case 'createShipments': $dhl->createShipments(Config::C_SHIPMENT_DATE); break;

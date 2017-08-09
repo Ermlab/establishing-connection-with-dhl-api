@@ -4,24 +4,38 @@ use DHL\Structures\AuthData;
 use DHL\Structures\ItemToPrint;
 use DHL\Structures\ShipmentFullData;
 
-include 'DHL24_webapi_client.php';
+include 'DHL24WebapiClient.php';
 include 'Structures/AuthData.php';
 include 'Structures/ShipmentFullData.php';
 include 'Structures/ItemToPrint.php';
-class Dhl24 {
+/**
+ * Class using to create request to API
+ */
+class DHL24 {
 	private $__client;
 	private $__authData;
 
+	
 	public function __construct() {
-		$this->__client =  new DHL24_webapi_client();
+		$this->__client =  new DHL24WebapiClient();
 		$this->__authData = new AuthData();
 	}
-
+	/**
+	 * Getting information about current version of API
+	 *
+	 * @return xml
+	 */
 	public function getVersion() {
 		$result = $this->__client->getVersion();
-		print_r($result);
+		return $result;
 	}
 
+	/**
+	 * Creating shipment in DHL system
+	 *
+	 * @param [date] $shipmentDate
+	 * @return void
+	 */
 	public function createShipments($shipmentDate) {
 		$shipments = new ShipmentFullData();
 		$params = [
@@ -32,6 +46,13 @@ class Dhl24 {
 		$this->__saveFiles();
 	}
 
+	/**
+	 * Getting waybill and thermal labels from API
+	 *
+	 * @param [date] $shipmentId
+	 * @param [string] $type
+	 * @return void
+	 */
 	public function getLabels($shipmentId, $type) {
 		$itemToPrint = new ItemToPrint();
 		$params = [
@@ -43,6 +64,13 @@ class Dhl24 {
 		$this->__saveLabels($result, $type);
 	}
 
+	/**
+	 * Booking courier for shipment pickup
+	 *
+	 * @param [int] $shipmentId
+	 * @param [date] $shipmentDate
+	 * @return void
+	 */
 	public function bookCourier($shipmentId, $shipmentDate) {
 		$params = [
 			'authData' => $this->__authData->getAuthData(),
@@ -58,12 +86,24 @@ class Dhl24 {
 		$this->__saveFiles();
 	}
 
+	/**
+	 * Saving requests and responses from API to .xml files
+	 *
+	 * @return void
+	 */
 	private function __saveFiles() {
 		$time_stamp = time();
 		file_put_contents('requests/' . 'request_' . $time_stamp . '.xml', $this->__client->__getLastRequest());
 		file_put_contents('requests/' . 'response_' . $time_stamp . '.xml', $this->__client->__getLastResponse());
 	}
 
+	/**
+	 * Saving waybill and thermal labels from API to files with label type extension
+	 *
+	 * @param [xml] $data
+	 * @param [string] $type
+	 * @return void
+	 */
 	private function __saveLabels($data, $type) {
 		if($type == 'protocol')
 			$labels = $data->getLabelsResult;
