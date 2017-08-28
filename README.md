@@ -3,7 +3,7 @@
 
 ## Description
 
-This project was created as example to post on our blog [Nawiązywanie połączenia z API firmy kurierskiej DHL](http://ermlab.com)
+This project was created as example to post on our blog [Nawiązywanie połączenia z API firmy kurierskiej DHL](http://ermlab.com/2017/08/28/polaczenie-z-api-firmy-kurierskiej-dhl/)
 Purpose of the project is to create simple library that allows to connect with DHL courier API.
 
 In this project we show:
